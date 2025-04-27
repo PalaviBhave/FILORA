@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Secure File Sharing</title>
+    <link rel="stylesheet" href="desktop.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            <h1>Filora</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#upload">Upload</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="hero">
+        <h2>Your files, securely shared with blockchain technology.</h2>
+        <p>Upload and share files with full encryption and integrity.</p>
+    </section>
+
+    <section id="upload">
+        <h2>Upload Your Files</h2>
+        <form id="fileUploadForm">
+            <input type="file" id="fileInput" name="file" accept="*/*" required>
+            <button type="submit">Upload File</button>
+        </form>
+        <div id="uploadStatus"></div>
+
+        <div class="permission">
+            <label for="permisssion"> Choose Permission : </label>
+
+            <select name="permission1" id="permission">
+                <option disabled selected value> -- select an option -- </option>
+                <option value="read">Read</option>
+                <option value="write">Write</option>
+                <option value="download">Download</option>
+                <option value="share">Share</option>
+            </select>
+        </div>
+
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Filora. All rights reserved.</p>
+    </footer>
+
+    <script type="module">
+
+        // Firebase and Pinata Configuration
+        const pinataApiKey = "98908e2ff20badc36d0c"; // Replace with your API Key
+        const pinataSecretApiKey = "575b944bad7a5bddd3b6bab2983240cc00039eeb9433cb72300c2675140e46b4"; // Replace with your Secret Key
+    
+        // Firebase SDK Import
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getDatabase, ref, set, push } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+    
+        // Firebase Configuration (Replace with your details)
+        const firebaseConfig = {
+            apiKey: "AIzaSyB4Kw8jOzO-8-2zOWXlRhS79NteJbjPtzE",
+            authDomain: "filora-7efea.firebaseapp.com",
+            databaseURL: "https://filora-7efea-default-rtdb.firebaseio.com",
+            projectId: "filora-7efea",
+            storageBucket: "filora-7efea.firebasestorage.app",
+            messagingSenderId: "19673570279",
+            appId: "1:19673570279:web:89837bb2b2d81921c83b42"
+        };
+    
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+    
+        // File Upload Handler
+        document.getElementById("fileUploadForm").addEventListener("submit", async function (event) {
+            event.preventDefault();
+    
+            const fileInput = document.getElementById("fileInput");
+            const permission = document.getElementById("permission").value;
+    
+            if (fileInput.files.length === 0) {
+                alert("Please select a file to upload!");
+                return;
+            }
+    
+            if (permission === "-- select an option --" || permission === "") {
+                alert("Please choose a permission before uploading!");
+                return;
+            }
+    
+            // ** Get Logged-in User's Email from Local Storage **
+            const userEmail = localStorage.getItem("userEmail");
+            if (!userEmail) {
+                alert("User not logged in! Please log in first.");
+                return;
+            }
+    
+            // Convert email to Firebase-friendly key (Base64 encoding)
+            const encodedEmail = btoa(userEmail);
+    
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append("file", file);
+    
+            // Display upload status
+            document.getElementById("uploadStatus").innerText = "Uploading file to IPFS... Please wait.";
+    
+            try {
+                const response = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
+                    method: "POST",
+                    headers: {
+                        "pinata_api_key": pinataApiKey,
+                        "pinata_secret_api_key": pinataSecretApiKey
+                    },
+                    body: formData
+                });
+    
+                const result = await response.json();
+    
+                if (response.ok) {
+                    const cid = result.IpfsHash;
+                    document.getElementById("uploadStatus").innerHTML = `✅ File uploaded successfully! CID: 
+                        <a href="https://ipfs.io/ipfs/${cid}" target="_blank">${cid}</a>`;
+    
+                    // Save CID & Permission to the logged-in user's Firebase record
+                    saveCidToFirebase(encodedEmail, cid, permission);
+                } else {
+                    throw new Error(result.error);
+                }
+            } catch (error) {
+                console.error("Error uploading file:", error);
+                document.getElementById("uploadStatus").innerText = "❌ Error uploading file!";
+            }
+        });
+    
+        // Function to Save CID & Permission to User's Data in Firebase
+        function saveCidToFirebase(userKey, cid, permission) {
+            const timestamp = new Date().toISOString();
+    
+            // Push the file data inside the user's node
+            const userFilesRef = ref(db, `users/${userKey}/uploaded_files`);
+            const newFileRef = push(userFilesRef); // Creates a unique entry for each file
+    
+            set(newFileRef, {
+                cid: cid,
+                permission: permission,
+                timestamp: timestamp
+            })
+            .then(() => {
+                console.log("File details saved successfully under user:", userKey);
+            })
+            .catch((error) => {
+                console.error("Error saving data to Firebase:", error);
+            });
+        }
+    
+    </script>
+    
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*************************************************************************************************************
+Take 2!!
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Secure File Sharing</title>
+    <link rel="stylesheet" href="desktop.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            <h1>Filora</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#upload">Upload</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="hero">
+        <h2>Your files, securely shared with blockchain technology.</h2>
+        <p>Upload and share files with full encryption and integrity.</p>
+    </section>
+
+    <section id="upload">
+        <h2>Upload Your Files</h2>
+        <form id="fileUploadForm">
+            <input type="file" id="fileInput" name="file" accept="*/*" required>
+            <button type="submit">Upload File</button>
+        </form>
+        <div id="uploadStatus"></div>
+
+        <div class="permission">
+            <label for="permisssion"> Choose Permission : </label>
+
+            <select name="permission1" id="permission">
+                <option disabled selected value> -- select an option -- </option>
+                <option value="read">Read</option>
+                <option value="write">Write</option>
+                <option value="download">Download</option>
+                <option value="share">Share</option>
+            </select>
+        </div>
+
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Filora. All rights reserved.</p>
+    </footer>
+
+    <script type="module">
+        // Firebase SDK Import
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getDatabase, ref, set, push } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+    
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB4Kw8jOzO-8-2zOWXlRhS79NteJbjPtzE",
+            authDomain: "filora-7efea.firebaseapp.com",
+            databaseURL: "https://filora-7efea-default-rtdb.firebaseio.com",
+            projectId: "filora-7efea",
+            storageBucket: "filora-7efea.firebasestorage.app",
+            messagingSenderId: "19673570279",
+            appId: "1:19673570279:web:89837bb2b2d81921c83b42"
+        };
+    
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+    
+        document.addEventListener("DOMContentLoaded", function () {
+            const userEmail = localStorage.getItem("userEmail");
+    
+            if (!userEmail) {
+                alert("User not logged in! Redirecting to login page...");
+                window.location.href = "index.html"; // Redirect to login if email is missing
+            } else {
+                console.log("User is logged in as:", userEmail);
+            }
+        });
+    
+        // File Upload Handler
+        document.getElementById("fileUploadForm").addEventListener("submit", async function (event) {
+            event.preventDefault();
+    
+            const fileInput = document.getElementById("fileInput");
+            const permission = document.getElementById("permission").value;
+    
+            if (fileInput.files.length === 0) {
+                alert("Please select a file to upload!");
+                return;
+            }
+    
+            if (permission === "-- select an option --" || permission === "") {
+                alert("Please choose a permission before uploading!");
+                return;
+            }
+    
+            // Get Logged-in User's Email from Local Storage
+            const userEmail = localStorage.getItem("userEmail");
+            if (!userEmail) {
+                alert("User not logged in! Please log in first.");
+                return;
+            }
+    
+            // Convert email to Firebase-friendly key (Base64 encoding)
+            const encodedEmail = btoa(userEmail);
+    
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append("file", file);
+    
+            // Display upload status
+            document.getElementById("uploadStatus").innerText = "Uploading file to IPFS... Please wait.";
+    
+            try {
+                const response = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
+                    method: "POST",
+                    headers: {
+                        "pinata_api_key": "98908e2ff20badc36d0c", // Replace with your API Key
+                        "pinata_secret_api_key": "575b944bad7a5bddd3b6bab2983240cc00039eeb9433cb72300c2675140e46b4" // Replace with your Secret Key
+                    },
+                    body: formData
+                });
+    
+                const result = await response.json();
+    
+                if (response.ok) {
+                    const cid = result.IpfsHash;
+                    document.getElementById("uploadStatus").innerHTML = `✅ File uploaded successfully! CID: 
+                        <a href="https://ipfs.io/ipfs/${cid}" target="_blank">${cid}</a>`;
+    
+                    // Save CID & Permission to the logged-in user's Firebase record
+                    saveCidToFirebase(encodedEmail, cid, permission);
+                } else {
+                    throw new Error(result.error);
+                }
+            } catch (error) {
+                console.error("Error uploading file:", error);
+                document.getElementById("uploadStatus").innerText = "❌ Error uploading file!";
+            }
+        });
+    
+        // Function to Save CID & Permission to User's Data in Firebase
+        function saveCidToFirebase(userKey, cid, permission) {
+            const timestamp = new Date().toISOString();
+    
+            // Push the file data inside the user's node
+            const userFilesRef = ref(db, `users/${userKey}/uploaded_files`);
+            const newFileRef = push(userFilesRef); // Creates a unique entry for each file
+    
+            set(newFileRef, {
+                cid: cid,
+                permission: permission,
+                timestamp: timestamp
+            })
+            .then(() => {
+                console.log("File details saved successfully under user:", userKey);
+            })
+            .catch((error) => {
+                console.error("Error saving data to Firebase:", error);
+            });
+        }
+    </script>
+    
+    
+</body>
+
+</html>

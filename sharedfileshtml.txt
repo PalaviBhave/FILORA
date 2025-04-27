@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shared Files</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #3d5a80;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .search-box {
+            position: relative;
+        }
+        .search-box input {
+            padding: 10px 10px 10px 30px;
+            border-radius: 20px;
+            border: none;
+            outline: none;
+            color: black;
+        }
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: gray;
+        }
+        .files-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        .file-card {
+            background: white;
+            color: black;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .file-card h2 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        .file-card p {
+            font-size: 14px;
+            color: gray;
+        }
+        .btn-container {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+        }
+        .view { background: #7F00FF; }
+        .download { background: #28a745; }
+        .remove { background: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Shared Files</h1>
+            <div class="search-box">
+                <input type="text" id="search" placeholder="Search files...">
+            </div>
+        </div>
+        <div class="files-container" id="files-container">
+            <!-- Files will be populated here dynamically -->
+        </div>
+    </div>
+    <script>
+        const files = [
+            { id: 1, name: 'Project_Docs.pdf', sender: 'John Doe', date: '12 Feb 2025' },
+            { id: 2, name: 'Design_Mockup.png', sender: 'Jane Smith', date: '10 Feb 2025' },
+            { id: 3, name: 'Meeting_Notes.docx', sender: 'Alice Brown', date: '08 Feb 2025' }
+        ];
+
+        function displayFiles(filteredFiles) {
+            const container = document.getElementById("files-container");
+            container.innerHTML = "";
+            filteredFiles.forEach(file => {
+                container.innerHTML += `
+                    <div class="file-card">
+                        <h2>${file.name}</h2>
+                        <p>Shared by: ${file.sender}</p>
+                        <p>Date: ${file.date}</p>
+                        <div class="btn-container">
+                            <button class="btn view">View</button>
+                            <button class="btn download">Download</button>
+                            <button class="btn remove">Remove</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        document.getElementById("search").addEventListener("input", function() {
+            const searchTerm = this.value.toLowerCase();
+            const filteredFiles = files.filter(file => file.name.toLowerCase().includes(searchTerm));
+            displayFiles(filteredFiles);
+        });
+
+        displayFiles(files);
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+**************************************************************************************************************
+Take 2
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shared Files</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #3d5a80;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            padding: 10px;
+            border-radius: 20px;
+            border: none;
+            outline: none;
+            color: black;
+        }
+
+        .files-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .file-card {
+            background: white;
+            color: black;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .file-card h2 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .btn-container {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .view {
+            background: #7F00FF;
+        }
+
+        .download {
+            background: #28a745;
+        }
+
+        .remove {
+            background: #dc3545;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Shared Files</h1>
+            <div class="search-box">
+                <input type="text" id="search" placeholder="Search files...">
+            </div>
+        </div>
+        <div class="files-container" id="files-container">
+            <!-- Files will be populated here dynamically -->
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getDatabase, ref, get, remove } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+
+        // Firebase Configuration (Replace with your credentials)
+        const firebaseConfig = {
+            apiKey: "AIzaSyB4Kw8jOzO-8-2zOWXlRhS79NteJbjPtzE",
+            authDomain: "filora-7efea.firebaseapp.com",
+            databaseURL: "https://filora-7efea-default-rtdb.firebaseio.com",
+            projectId: "filora-7efea",
+            storageBucket: "filora-7efea.firebasestorage.app",
+            messagingSenderId: "19673570279",
+            appId: "1:19673570279:web:89837bb2b2d81921c83b42"
+        };
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Get Logged-in User
+        const userEmail = localStorage.getItem("userEmail");
+
+        if (!userEmail) {
+            alert("User not logged in! Redirecting to login page...");
+            window.location.href = "index.html"; // Redirect to login if email is missing
+        }
+
+        const userKey = btoa(userEmail); // Convert email to Firebase key
+
+        // Fetch Shared Files
+        async function fetchSharedFiles() {
+            const sharedFilesRef = ref(db, `users/${userKey}/shared_files`);
+            const snapshot = await get(sharedFilesRef);
+
+            if (!snapshot.exists()) {
+                document.getElementById("files-container").innerHTML = "<p>No shared files found.</p>";
+                return;
+            }
+
+            const files = snapshot.val();
+            displayFiles(files);
+        }
+
+        function displayFiles(files) {
+            const container = document.getElementById("files-container");
+            container.innerHTML = "";
+
+            let count = 1; // Counter to display "File 1", "File 2"...
+            Object.keys(files).forEach(fileId => {
+                const file = files[fileId];
+                container.innerHTML += `
+                    <div class="file-card">
+                        <h2>File ${count}</h2> <!-- Instead of CID, we show File 1, File 2, etc. -->
+                        <p>Permission: ${file.permission}</p>
+                        <p>Shared by: ${file.shared_by || "Unknown"}</p>
+                        <p>Date: ${new Date(file.timestamp).toLocaleString()}</p>
+                        <div class="btn-container">
+                            <button class="btn view" onclick="viewFile('${file.cid}')">View</button>
+                            <button class="btn download" onclick="downloadFile('${file.cid}')">Download</button>
+                            <button class="btn remove" onclick="removeFile('${fileId}')">Remove</button>
+                        </div>
+                    </div>
+                `;
+                count++; // Increment for the next file
+            });
+        }
+
+        // Attach functions to the global window object
+        window.viewFile = function (cid) {
+            window.open(`https://ipfs.io/ipfs/${cid}`, "_blank");
+        };
+
+        window.downloadFile = function (cid) {
+            const a = document.createElement("a");
+            a.href = `https://ipfs.io/ipfs/${cid}`;
+            a.download = cid;
+            a.click();
+        };
+
+        window.removeFile = async function (fileId) {
+            const fileRef = ref(db, `users/${userKey}/shared_files/${fileId}`);
+            await remove(fileRef);
+            alert("File removed successfully!");
+            fetchSharedFiles(); // Refresh list
+        };
+
+
+        // Live Search
+        document.getElementById("search").addEventListener("input", function () {
+            const searchTerm = this.value.toLowerCase();
+            const allCards = document.querySelectorAll(".file-card");
+
+            allCards.forEach((card, index) => {
+                const fileName = `File ${index + 1}`.toLowerCase();
+                if (fileName.includes(searchTerm)) {
+                    card.style.display = "block";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        });
+
+        fetchSharedFiles();
+    </script>
+</body>
+
+</html>

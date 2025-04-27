@@ -1,0 +1,38 @@
+ <script type="module">
+
+        //firebase db
+
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyB4Kw8jOzO-8-2zOWXlRhS79NteJbjPtzE",
+          authDomain: "filora-7efea.firebaseapp.com",
+          databaseURL: "https://filora-7efea-default-rtdb.firebaseio.com",
+          projectId: "filora-7efea",
+          storageBucket: "filora-7efea.firebasestorage.app",
+          messagingSenderId: "19673570279",
+          appId: "1:19673570279:web:89837bb2b2d81921c83b42"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+      </script>
+
+
+
+
+
+  //Ipfs api keys
+ api key  98908e2ff20badc36d0c
+
+ api secrete : 575b944bad7a5bddd3b6bab2983240cc00039eeb9433cb72300c2675140e46b4
+
+
+ API Key: 98908e2ff20badc36d0c
+API Secret: 575b944bad7a5bddd3b6bab2983240cc00039eeb9433cb72300c2675140e46b4
+JWT: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI5ZDA2OTk4ZS1kMTM2LTQzOTYtOGFlZC1kNTYwNmU1Mzc0ZWIiLCJlbWFpbCI6InZhaWJoYmhhdTMzM0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGluX3BvbGljeSI6eyJyZWdpb25zIjpbeyJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MSwiaWQiOiJGUkExIn0seyJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MSwiaWQiOiJOWUMxIn1dLCJ2ZXJzaW9uIjoxfSwibWZhX2VuYWJsZWQiOmZhbHNlLCJzdGF0dXMiOiJBQ1RJVkUifSwiYXV0aGVudGljYXRpb25UeXBlIjoic2NvcGVkS2V5Iiwic2NvcGVkS2V5S2V5IjoiOTg5MDhlMmZmMjBiYWRjMzZkMGMiLCJzY29wZWRLZXlTZWNyZXQiOiI1NzViOTQ0YmFkN2E1YmRkZDNiNmJhYjI5ODMyNDBjYzAwMDM5ZWViOTQzM2NiNzIzMDBjMjY3NTE0MGU0NmI0IiwiZXhwIjoxNzc0MDgxNjY5fQ.kClH8MQvJCvqUfObagAzt8Y5SyEIXGfPqV6b3p2KzbI
